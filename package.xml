@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package format="2">
+  <name>kal_controller_ros_tool</name>
+  <version>0.0.0</version>
+  <description>Controller package for KAL pipeline.</description>
+
+  <license>BSD</license>
+  <maintainer email="nick.lelarge@kit.edu">Nick Le Large</maintainer>
+  <author email="danial.kamran@kit.edu">Danial Kamran</author>
+  <url type="repository">https://gitlab.mrt.kit.edu/kognitive_automobile_labor/shared/kal_controller_ros_tool</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <build_depend>rosinterface_handler</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>detection_msgs</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <test_depend>gtest</test_depend>
+  <build_depend>roscpp</build_depend>
+  <test_depend>rostest</test_depend>
+  <test_depend>util_testing_ros</test_depend>
+
+  <build_export_depend>detection_msgs</build_export_depend>
+  <exec_depend>detection_msgs</exec_depend>
+
+  <depend>ackermann_msgs</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>eigen</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>nodelet</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>visualization_msgs</depend>
+
+  <depend>kal_controller</depend>
+
+  <export>
+    <nodelet plugin="${prefix}/nodelet_plugins.xml" /><!-- Other tools can request additional information be placed here -->
+  </export>
+</package>

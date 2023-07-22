@@ -1,0 +1,6 @@
+<library path="lib/libkal_controller_ros_tool-controller-nodelet">
+<class name="kal_controller_ros_tool/ControllerNodelet"
+       type="kal_controller_ros_tool::ControllerNodelet" base_class_type="nodelet::Nodelet">
+  <description></description>
+</class>
+</library>
