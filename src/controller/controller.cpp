@@ -1,5 +1,7 @@
 #include "controller.hpp"
 
+#include <chrono>
+#include <thread>
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include <ros/time.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -239,6 +241,12 @@ void ControllerNode::yoloCallback(const detection_msgs::BoundingBoxes::ConstPtr&
                     // 获取当前时间作为停车开始时间
                     stopStartTime = ros::Time::now();
                     // publishStopCommand();
+
+                    int countdown_seconds = 3;
+                    for (int i = countdown_seconds; i > 0; i--){
+                        std::this_thread::sleep_for(std::chrono::seconds(1));
+                    }
+
 
                 }
             }
