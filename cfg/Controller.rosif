@@ -69,6 +69,8 @@ gen.add("min_velocity_threshold", paramtype='double', description="Desired veloc
 pub_sub = gen.add_group("Publisher and subscriber")
 pub_sub.add_subscriber("trajectory_subscriber", message_type="nav_msgs::Path",
                        description="Trajectory subscriber", no_delay=True)
+pub_sub.add_subscriber("cone_trajectory_subscriber", message_type="nav_msgs::Path",
+                       description="cone_Trajectory subscriber", no_delay=True)
 pub_sub.add_publisher("control_command_publisher", message_type="ackermann_msgs::AckermannDriveStamped",
                       description="Control command publisher")
 pub_sub.add_subscriber("yolo_subscriber", message_type="detection_msgs::BoundingBoxes",

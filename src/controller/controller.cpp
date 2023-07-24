@@ -27,6 +27,8 @@ ros::Time vehicleStartTime;
     // 定义车辆启动后需要暂时忽略停车标志的时间阈值（秒）
 double ignoreStopSignTimeThreshold = 7.0;
 
+bool isconetrajectory = false;
+
 
 /**
  * Initialization
@@ -45,6 +47,8 @@ ControllerNode::ControllerNode(const ros::NodeHandle& nhPrivate)
     reconfigureServer_.setCallback(boost::bind(&ControllerNode::reconfigureCallback, this, _1, _2));
     interface_.yolo_subscriber->registerCallback(&ControllerNode::yoloCallback, this);
     interface_.trajectory_subscriber->registerCallback(&ControllerNode::trajectoryCallback, this);
+
+    interface_.cone_trajectory_subscriber->registerCallback(&ControllerNode::conetrajectoryCallback, this);
     controlLoopTimer_ =
         nhPrivate.createTimer(ros::Rate(interface_.control_loop_rate), &ControllerNode::controlLoopCallback, this);
 
@@ -58,9 +62,20 @@ ControllerNode::ControllerNode(const ros::NodeHandle& nhPrivate)
 }
 
 
+void ControllerNode::conetrajectoryCallback(const nav_msgs::Path::ConstPtr& trajectoryMsg) {
+    trajectoryStamp_ = ros::Time::now();
+    if (isconetrajectory){
+        trajectory_ = conversions::trajectoryMsgToTrajectory(trajectoryMsg);
+    }
+
+}
+
 void ControllerNode::trajectoryCallback(const nav_msgs::Path::ConstPtr& trajectoryMsg) {
     trajectoryStamp_ = ros::Time::now();
-    trajectory_ = conversions::trajectoryMsgToTrajectory(trajectoryMsg);
+    if (!isconetrajectory){
+        trajectory_ = conversions::trajectoryMsgToTrajectory(trajectoryMsg);
+    }
+
 }
 
 void ControllerNode::controlLoopCallback(const ros::TimerEvent& timerEvent) {
@@ -213,6 +228,18 @@ void ControllerNode::setControllerParameters() {
 
 }
 void ControllerNode::yoloCallback(const detection_msgs::BoundingBoxes::ConstPtr& msg){
+
+
+        for(const auto& bbox:msg->bounding_boxes){
+            if(bbox.Class=="trafficcone"){
+                double distance = bbox.distance;
+                if (distance < 500.0) {
+                    isconetrajectory = true;
+                }
+
+            }
+        }
+
         // 如果车辆已经启动，并且启动时间小于阈值，则忽略对停车标志的检测
         if (isVehicleStarted) {
             ros::Time currentTime = ros::Time::now();
